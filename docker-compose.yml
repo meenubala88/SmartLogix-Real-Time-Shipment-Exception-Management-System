@@ -1,0 +1,25 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: smartlogix-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smartlogix
+    ports:
+      - "3306:3306"
+    volumes:
+      - smartlogix-data:/var/lib/mysql
+  app:
+    build: .
+    container_name: smartlogix-api
+    depends_on:
+      - mysql
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/smartlogix
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      JWT_SECRET: VGhpc0lzQURldmVsb3BtZW50T25seVNlY3JldEtleUZvclNtYXJ0TG9naXhBcHAxMjM0NTY=
+    ports:
+      - "8080:8080"
+volumes:
+  smartlogix-data:
